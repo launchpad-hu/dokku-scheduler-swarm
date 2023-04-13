@@ -16,7 +16,7 @@ trigger-scheduler-swarm-scheduler-deploy() {
     dokku_log_fail "Scheduler swarm does not support process types"
   fi
 
-  "$DOCKER_BIN" stack deploy --with-registry-auth --compose-file docker-compose.yml "$APP"
+  APP="$APP" "$DOCKER_BIN" stack deploy --with-registry-auth --compose-file docker-compose.yml "$APP"
 }
 
 trigger-scheduler-swarm-scheduler-deploy "$@"
