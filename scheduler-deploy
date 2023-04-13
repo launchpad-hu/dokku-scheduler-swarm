@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -e
+
+trigger-scheduler-swarm-scheduler-deploy() {
+  declare desc="deploys an image tag for a given application"
+  declare trigger="scheduler-deploy"
+  declare DOKKU_SCHEDULER="$1" APP="$2" IMAGE_TAG="$3" PROCESS_TYPE="$4"
+  local PROCESS_TYPE
+
+  if [[ "$DOKKU_SCHEDULER" != "swarm" ]]; then
+    return
+  fi
+
+  if [[ ! -z "$PROCESS_TYPE" ]]; then
+    dokku_log_fail "Scheduler swarm does not support process types"
+  fi
+
+  "$DOCKER_BIN" stack deploy --with-registry-auth --compose-file docker-compose.yaml "$APP"
+}
+
+trigger-scheduler-swarm-scheduler-deploy "$@"
