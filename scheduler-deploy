@@ -7,6 +7,7 @@ trigger-scheduler-swarm-scheduler-deploy() {
   declare trigger="scheduler-deploy"
   declare DOKKU_SCHEDULER="$1" APP="$2" IMAGE_TAG="$3" PROCESS_TYPE="$4"
   local PROCESS_TYPE
+  dokku_log_info1 "Deploying with $trigger"
 
   if [[ "$DOKKU_SCHEDULER" != "swarm" ]]; then
     return
