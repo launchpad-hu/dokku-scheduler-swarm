@@ -19,6 +19,10 @@ dokku scheduler:set myapp selected swarm
 
 3. push to Dokku
 
+## Limitations
+
+Currently does not work together with builders.
+
 ## License
 
 MIT
