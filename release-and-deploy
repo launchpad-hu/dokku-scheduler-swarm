@@ -4,19 +4,19 @@ set -eo pipefail
 [[ $DOKKU_TRACE ]] && set -x
 source "$PLUGIN_CORE_AVAILABLE_PATH/common/functions"
 
-trigger-scheduler-swarm-release-and-deploy() {
-  declare desc="deploys an image tag for a given application"
+trigger-swarm-release-and-deploy() {
+  declare desc="deploys a stack from docker-compose.yml"
   declare trigger="release-and-deploy"
   declare APP="$1"
-  local DOKKU_SCHEDULER=$(get_app_scheduler "$APP")
 
+  local DOKKU_SCHEDULER=$(get_app_scheduler "$APP")
   if [[ "$DOKKU_SCHEDULER" != "swarm" ]]; then
     return
   fi
 
-  dokku_log_info1 "Deploying with swarm"
+  dokku_log_info1 "Deploying stack $APP to swarm"
 
   APP="$APP" "$DOCKER_BIN" stack deploy --with-registry-auth --compose-file docker-compose.yml "$APP"
 }
 
-trigger-scheduler-swarm-release-and-deploy "$@"
+trigger-swarm-release-and-deploy "$@"
