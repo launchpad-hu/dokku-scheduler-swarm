@@ -29,7 +29,7 @@ trigger-swarm-scheduler-deploy() {
 
   dokku_log_info1 "Deploying stack $APP to swarm"
   eval "$(config_export app "$APP" --merged --format=exports)"
-  APP="$APP" "$DOCKER_BIN" stack deploy --with-registry-auth --compose-file "$DATA_DIR/docker-compose.yml" "$APP"
+  APP="$APP" IMAGE_TAG="$IMAGE_TAG" "$DOCKER_BIN" stack deploy --with-registry-auth --compose-file "$DATA_DIR/docker-compose.yml" "$APP"
 }
 
 trigger-swarm-scheduler-deploy "$@"

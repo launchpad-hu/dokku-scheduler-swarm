@@ -41,6 +41,10 @@ dokku config:set myapp DOMAIN=example.com
 
 ## Changelog
 
+### 1.1.0
+
+- provide `$IMAGE_TAG` for compose file
+
 ### 1.0.0
 
 - implement support for config vars
