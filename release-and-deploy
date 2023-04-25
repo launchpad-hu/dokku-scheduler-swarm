@@ -8,15 +8,18 @@ trigger-swarm-release-and-deploy() {
   declare desc="deploys a stack from docker-compose.yml"
   declare trigger="release-and-deploy"
   declare APP="$1"
+  local IMAGE_TAG="${2:-latest}"
 
   local DOKKU_SCHEDULER=$(get_app_scheduler "$APP")
   if [[ "$DOKKU_SCHEDULER" != "swarm" ]]; then
     return
   fi
 
-  dokku_log_info1 "Deploying stack $APP to swarm"
-
-  APP="$APP" "$DOCKER_BIN" stack deploy --with-registry-auth --compose-file docker-compose.yml "$APP"
+  # This file is a workaround: dokku does not call scheduler-deploy if the app image does not exist
+  local IMAGE=$(get_app_image_name "$APP" "$IMAGE_TAG")
+  if ! verify_image "$IMAGE"; then
+    plugn trigger scheduler-deploy "$DOKKU_SCHEDULER" "$APP"
+  fi
 }
 
 trigger-swarm-release-and-deploy "$@"

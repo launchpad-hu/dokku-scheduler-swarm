@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -eo pipefail
+[[ $DOKKU_TRACE ]] && set -x
+source "$PLUGIN_CORE_AVAILABLE_PATH/common/functions"
+
+trigger-swarm-scheduler-app-status() {
+  declare desc="fetches the status for a given app"
+  declare trigger="scheduler-app-status"
+
+  declare DOKKU_SCHEDULER="$1" APP="$2"
+
+  if [[ "$DOKKU_SCHEDULER" != "swarm" ]]; then
+    return
+  fi
+
+  if "$DOCKER_BIN" stack ls --format '{{.Name}}' | grep "^$APP$" > /dev/null; then
+    echo "1 running"
+  else
+    echo "1 stopped"
+  fi
+}
+
+trigger-swarm-scheduler-app-status "$@"

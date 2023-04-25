@@ -19,14 +19,31 @@ dokku scheduler:set myapp selected swarm
 
 3. push to Dokku
 
+## Configuration
+
+All config variables set with `dokku:config` are available in the compose file as substitutions.
+
+```
+dokku config:set myapp DOMAIN=example.com
+```
+
+```
+    labels:
+      - "traefik.http.routers.portainer.rule=Host(`${DOMAIN}`)"
+```
+
 ## Roadmap
 
-- [ ] support for config vars
-- [ ] support for horizontal scaling 
+- [ ] support for dokku-managed domains
+- [ ] support for horizontal scaling
 - [ ] support for building the app from the repo
-- [ ] built-in support for traefik
+- [ ] support for traefik
 
 ## Changelog
+
+### 1.0.0
+
+- implement support for config vars
 
 ## License
 

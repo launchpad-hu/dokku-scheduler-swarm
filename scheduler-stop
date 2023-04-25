@@ -13,16 +13,8 @@ trigger-swarm-scheduler-stop() {
     return
   fi
 
-  if [[ "$REMOVE_CONTAINERS" = true ]]; then
-    dokku_log_info1 "Removing stack $APP"
-
-    APP="$APP" "$DOCKER_BIN" stack rm "$APP"
-
-  else
-    dokku_log_info1 "Removing stack $APP"
-
-    APP="$APP" "$DOCKER_BIN" stack rm "$APP"
-  fi
+  dokku_log_info1 "Removing stack $APP"
+  APP="$APP" "$DOCKER_BIN" stack rm "$APP"
 }
 
 trigger-swarm-scheduler-stop "$@"

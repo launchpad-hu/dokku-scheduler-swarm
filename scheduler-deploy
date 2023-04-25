@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+[[ $DOKKU_TRACE ]] && set -x
+source "$PLUGIN_CORE_AVAILABLE_PATH/common/functions"
+source "$PLUGIN_CORE_AVAILABLE_PATH/config/functions"
+
+trigger-swarm-scheduler-deploy() {
+  declare desc="redeploys the app"
+  declare trigger="scheduler-deploy"
+  declare DOKKU_SCHEDULER="$1" APP="$2" IMAGE_TAG="$3"
+
+  if [[ "$DOKKU_SCHEDULER" != "swarm" ]]; then
+    return
+  fi
+
+  local DATA_DIR="$DOKKU_LIB_ROOT/data/swarm/$APP"
+  mkdir -p "$DATA_DIR"
+
+  # if deploying from a git repo, not redeploying
+  if [[ -r ./docker-compose.yml ]]; then
+    # save the compose file
+    cp -a docker-compose.yml "$DATA_DIR/docker-compose.yml"
+  fi
+
+  if [[ ! -f "$DATA_DIR/docker-compose.yml" ]]; then
+    dokku_log_fail "No docker-compose.yml in repo"
+  fi
+
+  dokku_log_info1 "Deploying stack $APP to swarm"
+  eval "$(config_export app "$APP" --merged --format=exports)"
+  APP="$APP" "$DOCKER_BIN" stack deploy --with-registry-auth --compose-file "$DATA_DIR/docker-compose.yml" "$APP"
+}
+
+trigger-swarm-scheduler-deploy "$@"
