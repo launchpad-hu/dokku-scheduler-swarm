@@ -5,7 +5,7 @@ A dokku plugin to deploy Docker Swarm stacks.
 ## Installation
 
 ```shell
-dokku plugin:install https://github.com/launchpad-hu/dokku-scheduler-swarm.git
+dokku plugin:install https://github.com/launchpad-hu/dokku-swarm.git
 ```
 
 ## Usage
@@ -19,9 +19,14 @@ dokku scheduler:set myapp selected swarm
 
 3. push to Dokku
 
-## Limitations
+## Roadmap
 
-Currently does not work together with builders.
+- [ ] support for config vars
+- [ ] support for horizontal scaling 
+- [ ] support for building the app from the repo
+- [ ] built-in support for traefik
+
+## Changelog
 
 ## License
 
