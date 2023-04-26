@@ -41,6 +41,10 @@ dokku config:set myapp DOMAIN=example.com
 
 ## Changelog
 
+### 1.2.0
+
+- push the tag `$IMAGE_TAG` to the registry
+
 ### 1.1.0
 
 - provide `$IMAGE_TAG` for compose file

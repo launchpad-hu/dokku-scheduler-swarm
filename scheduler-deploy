@@ -27,6 +27,16 @@ trigger-swarm-scheduler-deploy() {
     dokku_log_fail "No docker-compose.yml in repo"
   fi
 
+  local PUSH_ON_RELEASE=$(dokku registry:report --registry-computed-push-on-release $APP)
+  if [[ $PUSH_ON_RELEASE = true ]]; then
+    local REGISTRY=$(dokku registry:report --registry-computed-image-repo $APP)
+    local SERVER=$(dokku registry:report --registry-computed-server $APP)
+    dokku_log_info1 "Pushing $REGISTRY:$IMAGE_TAG to $SERVER$REGISTRY:$IMAGE_TAG"
+    "$DOCKER_BIN" tag $REGISTRY:$IMAGE_TAG $SERVER$REGISTRY:$IMAGE_TAG
+    "$DOCKER_BIN" push $SERVER$REGISTRY:$IMAGE_TAG
+    dokku_log_info1 "Pushed tag to registry"
+  fi
+
   dokku_log_info1 "Deploying stack $APP to swarm"
   eval "$(config_export app "$APP" --merged --format=exports)"
   APP="$APP" IMAGE_TAG="$IMAGE_TAG" "$DOCKER_BIN" stack deploy --with-registry-auth --compose-file "$DATA_DIR/docker-compose.yml" "$APP"
