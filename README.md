@@ -57,9 +57,13 @@ dokku config:set myapp DOMAIN=example.com
 
 ## Changelog
 
+### 1.3.0
+
+- save all files for redeploy
+
 ### 1.2.0
 
-- push the tag `$IMAGE_TAG` to the registry
+- push current tag to registry
 
 ### 1.1.0
 
