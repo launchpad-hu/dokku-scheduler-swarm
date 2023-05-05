@@ -4,6 +4,7 @@ set -eo pipefail
 [[ $DOKKU_TRACE ]] && set -x
 source "$PLUGIN_CORE_AVAILABLE_PATH/common/functions"
 source "$PLUGIN_CORE_AVAILABLE_PATH/config/functions"
+source "$PLUGIN_CORE_AVAILABLE_PATH/domains/functions"
 
 trigger-swarm-scheduler-deploy() {
   declare desc="redeploys the app"
@@ -39,6 +40,7 @@ trigger-swarm-scheduler-deploy() {
   fi
 
   dokku_log_info1 "Deploying stack $APP to swarm"
+  export DOMAIN=$(get_app_domains "$APP" | head -1)
   eval "$(config_export app "$APP" --merged --format=exports)"
   APP="$APP" IMAGE_TAG="$IMAGE_TAG" "$DOCKER_BIN" stack deploy --with-registry-auth --compose-file "$DATA_DIR/docker-compose.yml" "$APP"
 }

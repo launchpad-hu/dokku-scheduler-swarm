@@ -57,6 +57,10 @@ dokku config:set myapp DOMAIN=example.com
 
 ## Changelog
 
+### 1.4.0
+
+- set `$DOMAIN` to the first domain of the app
+
 ### 1.3.0
 
 - save all files for redeploy
