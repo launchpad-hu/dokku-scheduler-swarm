@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -eo pipefail
+[[ $DOKKU_TRACE ]] && set -x
+
+cmd-swarm-help() {
+  declare desc="help command"
+  declare CMD="$1"
+  local plugin_name="swarm"
+  local plugin_description="Manage the swarm scheduler integration for an app"
+
+  if [[ "$CMD" == "${plugin_name}:help" ]]; then
+    echo -e "Usage: dokku ${plugin_name}[:COMMAND]"
+    echo ''
+    echo "$plugin_description"
+    echo ''
+    echo 'Additional commands:'
+    fn-help-content | sort | column -c2 -t -s,
+  elif [[ $(ps -o command= $PPID) == *"--all"* ]]; then
+    fn-help-content
+  else
+    cat <<help_desc
+    $plugin_name, $plugin_description
+help_desc
+  fi
+}
+
+fn-help-content() {
+  declare desc="return help content"
+  cat <<help_content
+    swarm:report [<app>] [<flag>], Displays a report of swarm properties for one or more apps
+    swarm:set <app> <property> (<value>), Set or clear a swarm property for an app
+help_content
+}

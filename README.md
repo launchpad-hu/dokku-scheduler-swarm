@@ -35,6 +35,15 @@ dokku scheduler:set myapp selected swarm
 
 3. push to Dokku
 
+## Settings
+
+You can set the compose file location to a file in the repo (relative path) or on the host machine (absolute path).
+
+```shell
+dokku swarm:set myapp compose-file prod.docker-compose.yml
+dokku swarm:set myapp compose-file /home/dokku/myapp.docker-compose.yml
+```
+
 ## Configuration
 
 All config variables set with `dokku:config` are available in the compose file as substitutions.
@@ -56,6 +65,10 @@ dokku config:set myapp DOMAIN=example.com
 - [ ] support for traefik
 
 ## Changelog
+
+### 1.5.0
+
+- support setting the compose file location
 
 ### 1.4.0
 
